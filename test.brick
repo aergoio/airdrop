@@ -1,0 +1,38 @@
+inject ac 100000000
+# ac = AmhoHnoaVDWG34YTpTuNjom2xmmSnA3scHo3XKrzMZ7GRe9mnrRi
+
+deploy ac 0 arc1_factory ../ARC1-Extensions/factory/output.lua
+deploy ac 0 airdrop_factory airdrop-factory.lua
+
+call ac 0 arc1_factory new_token `["Test","TST",18,1000]`
+# token = AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd
+
+call ac 0 airdrop_factory new_airdrop `[null, "AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd", "same", "1"]`
+# airdrop = AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS
+
+query AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS token `[]` `"AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd"`
+
+inject u1 10000000
+inject u2 10000000
+inject u3 10000000
+# u1 = AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv
+# u2 = AmgmWedh4YyBqfFVcegpEfV5zPXWXx7xpsQpoHXRWj3YvPJBvLxZ
+# u3 = AmfxAL2NrWhdXhDepn8gUM41sLmhdTi5KjvbuPX3T3MvCg5eZxiw
+
+call ac 0 AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS add_recipients `[["AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv","AmgmWedh4YyBqfFVcegpEfV5zPXWXx7xpsQpoHXRWj3YvPJBvLxZ","AmfxAL2NrWhdXhDepn8gUM41sLmhdTi5KjvbuPX3T3MvCg5eZxiw"]]`
+
+query AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS has_tokens `["AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv"]` `"1"`
+query AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS has_tokens `["AmgmWedh4YyBqfFVcegpEfV5zPXWXx7xpsQpoHXRWj3YvPJBvLxZ"]` `"1"`
+query AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS has_tokens `["AmfxAL2NrWhdXhDepn8gUM41sLmhdTi5KjvbuPX3T3MvCg5eZxiw"]` `"1"`
+query AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS has_tokens `["AmhoHnoaVDWG34YTpTuNjom2xmmSnA3scHo3XKrzMZ7GRe9mnrRi"]` `null`
+
+query AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd balanceOf `["AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv"]` `{"_bignum":"0"}`
+
+call ac 0 AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd transfer `["AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS","50000000000000000000"]`
+
+call AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv 0 AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS withdraw `[]`
+
+query AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd balanceOf `["AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv"]` `{"_bignum":"1"}`
+
+call AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv 0 AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS add_recipients `[["AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv"]]` `permission denied`
+call AmgmWedh4YyBqfFVcegpEfV5zPXWXx7xpsQpoHXRWj3YvPJBvLxZ 0 AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS add_recipients `[["AmfxAL2NrWhdXhDepn8gUM41sLmhdTi5KjvbuPX3T3MvCg5eZxiw"]]` `permission denied`
