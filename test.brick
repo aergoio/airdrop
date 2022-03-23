@@ -7,7 +7,7 @@ deploy ac 0 airdrop_factory airdrop-factory.lua
 call ac 0 arc1_factory new_token `["Test","TST",18,1000]`
 # token = AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd
 
-call ac 0 airdrop_factory new_airdrop `[null, "AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd", "same", "1"]`
+call ac 0 airdrop_factory new_airdrop `[null, "AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd", "same", "10"]`
 # airdrop = AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS
 
 query AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS token `[]` `"AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd"`
@@ -21,9 +21,9 @@ inject u3 10000000
 
 call ac 0 AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS add_recipients `[["AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv","AmgmWedh4YyBqfFVcegpEfV5zPXWXx7xpsQpoHXRWj3YvPJBvLxZ","AmfxAL2NrWhdXhDepn8gUM41sLmhdTi5KjvbuPX3T3MvCg5eZxiw"]]`
 
-query AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS has_tokens `["AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv"]` `"1"`
-query AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS has_tokens `["AmgmWedh4YyBqfFVcegpEfV5zPXWXx7xpsQpoHXRWj3YvPJBvLxZ"]` `"1"`
-query AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS has_tokens `["AmfxAL2NrWhdXhDepn8gUM41sLmhdTi5KjvbuPX3T3MvCg5eZxiw"]` `"1"`
+query AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS has_tokens `["AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv"]` `"10"`
+query AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS has_tokens `["AmgmWedh4YyBqfFVcegpEfV5zPXWXx7xpsQpoHXRWj3YvPJBvLxZ"]` `"10"`
+query AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS has_tokens `["AmfxAL2NrWhdXhDepn8gUM41sLmhdTi5KjvbuPX3T3MvCg5eZxiw"]` `"10"`
 query AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS has_tokens `["AmhoHnoaVDWG34YTpTuNjom2xmmSnA3scHo3XKrzMZ7GRe9mnrRi"]` `null`
 
 query AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd balanceOf `["AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv"]` `{"_bignum":"0"}`
@@ -32,7 +32,11 @@ call ac 0 AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd transfer `["AmhNL
 
 call AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv 0 AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS withdraw `[]`
 
-query AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd balanceOf `["AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv"]` `{"_bignum":"1"}`
+query AmgvNk818bMfksxLswodwJRWAMEjK3WaLwvPCUQh27ipMfPaGkGd balanceOf `["AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv"]` `{"_bignum":"10"}`
 
 call AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv 0 AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS add_recipients `[["AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv"]]` `permission denied`
 call AmgmWedh4YyBqfFVcegpEfV5zPXWXx7xpsQpoHXRWj3YvPJBvLxZ 0 AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS add_recipients `[["AmfxAL2NrWhdXhDepn8gUM41sLmhdTi5KjvbuPX3T3MvCg5eZxiw"]]` `permission denied`
+
+query airdrop_factory has_tokens `["AmhNFQVGvqQNzhwpmVa4LvA58nSTabL2B4bEyeJgeJNShEXCibfv"]` `{}`
+# query airdrop_factory has_tokens `["AmgmWedh4YyBqfFVcegpEfV5zPXWXx7xpsQpoHXRWj3YvPJBvLxZ"]` `[["AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS","10","TST",18]]`
+query airdrop_factory has_tokens `["AmgmWedh4YyBqfFVcegpEfV5zPXWXx7xpsQpoHXRWj3YvPJBvLxZ"]` `[{"address":"AmhNLhyd9tajGfTdiEqvp2pKGHYUyLqs6AwcX6RtYsRQTChPMJPS","amount":"10","decimals":18,"name":"Test","symbol":"TST"}]`

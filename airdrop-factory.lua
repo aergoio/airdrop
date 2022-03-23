@@ -152,6 +152,11 @@ abi.register_view(token, has_tokens)
 -- FACTORY
 -------------------------------------------------------------------
 
+state.var {
+  _num_airdrops = state.value(),
+  _airdrops = state.map()
+}
+
 local function _typecheck(x, t)
   if (x and t == 'address') then -- a string of alphanumeric char. except for '0, I, O, l'
     assert(type(x) == 'string', "AirDrop: address must be string type")
@@ -197,9 +202,76 @@ function new_airdrop(owner, token, airdrop_type, amount)
 
   local address = contract.deploy(contract_code)
 
+  local num_airdrops = (_num_airdrops:get() or 0) + 1
+  _num_airdrops:set(num_airdrops)
+  _airdrops[tostring(num_airdrops)] = address
+
   contract.event("new_airdrop", address)
 
   return address
 end
 
+function list_airdrops(first, size)
+
+  if first == nil or first == 0 then
+    first = 1
+  end
+  if size == nil or size == 0 then
+    size = 100
+  end
+  local last = first + size - 1
+
+  local list = {}
+
+  for n = first,last do
+    local address = _airdrops[tostring(n)]
+    if address == nil then break end
+    list[#list + 1] = address
+  end
+
+  return list
+end
+
+function has_tokens(account, first, size)
+
+  if first == nil or first == 0 then
+    first = 1
+  end
+  if size == nil or size == 0 then
+    size = 100
+  end
+  local last = first + size - 1
+
+  local num_airdrops = _num_airdrops:get() or 0
+  if first > num_airdrops then
+    return nil
+  end
+
+  local list = {}
+
+  for n = first,last do
+    local address = _airdrops[tostring(n)]
+    if address == nil then break end
+    local amount = contract.call(address, "has_tokens", account)
+    if amount ~= nil then
+      local token = contract.call(address, "token")
+      local name = contract.call(token, "name")
+      local symbol = contract.call(token, "symbol")
+      local decimals = contract.call(token, "decimals")
+      -- list[#list + 1] = {address, amount, name, symbol, decimals}
+      local item = {
+        address = address,
+        amount = amount,
+        name = name,
+        symbol = symbol,
+        decimals = decimals
+      }
+      list[#list + 1] = item
+    end
+  end
+
+  return list
+end
+
 abi.register(new_airdrop)
+abi.register_view(list_airdrops, has_tokens)
