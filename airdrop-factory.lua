@@ -211,15 +211,15 @@ function new_airdrop(owner, token, airdrop_type, amount)
   return address
 end
 
-function list_airdrops(first, size)
+function list_airdrops(first, count)
 
   if first == nil or first == 0 then
     first = 1
   end
-  if size == nil or size == 0 then
-    size = 100
+  if count == nil or count == 0 then
+    count = 100
   end
-  local last = first + size - 1
+  local last = first + count - 1
 
   local list = {}
 
@@ -232,15 +232,15 @@ function list_airdrops(first, size)
   return list
 end
 
-function has_tokens(account, first, size)
+function has_tokens(account, first, count)
 
   if first == nil or first == 0 then
     first = 1
   end
-  if size == nil or size == 0 then
-    size = 100
+  if count == nil or count == 0 then
+    count = 100
   end
-  local last = first + size - 1
+  local last = first + count - 1
 
   local num_airdrops = _num_airdrops:get() or 0
   if first > num_airdrops then
