@@ -5,11 +5,10 @@
 airdrop_diff_amount = [[
 
 state.var {
+  creator = state.value(),
+  token_address = state.value(),
   recipients = state.map()
 }
-
-creator = "%creator_address%"
-token_address = "%token_address%"
 
 local function _typecheck(x, t)
   if (x and t == 'address') then -- a string of alphanumeric char. except for '0, I, O, l'
@@ -29,7 +28,7 @@ end
 
 function add_recipients(list)
 
-  assert(system.getSender() == creator, "permission denied")
+  assert(system.getSender() == creator:get(), "permission denied")
 
   for address,amount in pairs(list) do
     _typecheck(address, "address")
@@ -40,7 +39,7 @@ function add_recipients(list)
 end
 
 function token()
-  return token_address  
+  return token_address:get()
 end
 
 function has_tokens(address)
@@ -61,12 +60,17 @@ function withdraw()
   recipients[address] = nil
 
   -- transfer tokens to the requester
-  contract.call(token_address, "transfer", address, amount)
+  contract.call(token_address:get(), "transfer", address, amount)
 
 end
 
 function tokensReceived(operator, from, amount, ...)
   -- used to receive tokens from the contract
+end
+
+function constructor(owner, token)
+  creator:set(owner)
+  token_address:set(token)
 end
 
 abi.register(add_recipients, withdraw, tokensReceived)
@@ -80,12 +84,11 @@ abi.register_view(token, has_tokens)
 airdrop_same_amount = [[
 
 state.var {
-  recipients = state.map()
+  creator = state.value(),
+  token_address = state.value(),
+  recipients = state.map(),
+  withdraw_amount = state.value()
 }
-
-creator = "%creator_address%"
-token_address = "%token_address%"
-withdraw_amount = "%withdraw_amount%"
 
 local function _typecheck(x, t)
   if (x and t == 'address') then -- a string of alphanumeric char. except for '0, I, O, l'
@@ -105,7 +108,7 @@ end
 
 function add_recipients(list)
 
-  assert(system.getSender() == creator, "permission denied")
+  assert(system.getSender() == creator:get(), "permission denied")
 
   for _,address in ipairs(list) do
     _typecheck(address, "address")
@@ -115,13 +118,13 @@ function add_recipients(list)
 end
 
 function token()
-  return token_address  
+  return token_address:get()
 end
 
 function has_tokens(address)
   _typecheck(address, "address")
   if recipients[address] == true then
-    return withdraw_amount
+    return withdraw_amount:get()
   else
     return nil
   end
@@ -136,12 +139,18 @@ function withdraw()
   recipients[address] = nil
 
   -- transfer tokens to the requester
-  contract.call(token_address, "transfer", address, withdraw_amount)
+  contract.call(token_address:get(), "transfer", address, withdraw_amount:get())
 
 end
 
 function tokensReceived(operator, from, amount, ...)
   -- used to receive tokens from the contract
+end
+
+function constructor(owner, token, amount)
+  creator:set(owner)
+  token_address:set(token)
+  withdraw_amount:set(amount)
 end
 
 abi.register(add_recipients, withdraw, tokensReceived)
@@ -185,22 +194,18 @@ function new_airdrop(owner, token, airdrop_type, amount)
   -- check if it is an ARC1 token - discard the result
   local result = contract.call(token, "arc1_extensions")
 
-  local contract_code
+  local address
 
   if airdrop_type == "same" then
     _typecheck(amount, "str_ubig")
-    contract_code = airdrop_same_amount
-    contract_code = string.gsub(contract_code, "%%withdraw_amount%%", amount)
+    local contract_code = airdrop_same_amount
+    address = contract.deploy(contract_code, owner, token, amount)
   elseif airdrop_type == "diff" then
-    contract_code = airdrop_diff_amount
+    local contract_code = airdrop_diff_amount
+    address = contract.deploy(contract_code, owner, token)
   else
     assert(false, "invalid airdrop type: '" .. airdrop_type .. "'")
   end
-
-  contract_code = string.gsub(contract_code, "%%creator_address%%", owner)
-  contract_code = string.gsub(contract_code, "%%token_address%%", token)
-
-  local address = contract.deploy(contract_code)
 
   local num_airdrops = (_num_airdrops:get() or 0) + 1
   _num_airdrops:set(num_airdrops)
